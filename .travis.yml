@@ -24,3 +24,6 @@ script:
   # Idempotence test
   - ansible-playbook -i inventory tests/test.yml --connection=local --sudo -e "postgresql_version=$POSTGRESQL_VERSION" > idempotence_out
   - ./tests/idempotence_check.sh idempotence_out
+
+  # MD5 Auth test (regression)
+  - ansible-playbook -i inventory tests/test_md5_auth.yml --connection=local --sudo -e "postgresql_version=$POSTGRESQL_VERSION"
