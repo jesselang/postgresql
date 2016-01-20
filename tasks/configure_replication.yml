@@ -29,8 +29,8 @@
     role_attr_flags: "LOGIN,REPLICATION"
     state: present
     login_user: "{{ postgresql_admin_user }}"
-  sudo: yes
-  sudo_user: "{{ postgresql_admin_user }}"
+  become: yes
+  become_user: "{{ postgresql_admin_user }}"
   when: not postgresql_replication_host
 
 # Set the replication user password if necessary.
@@ -43,8 +43,8 @@
       -h {{ hostvars[postgresql_replication_primary_host]['ansible_' + postgresql_replication_interface]['ipv4']['address'] }}
       -p {{ postgresql_port }}
       -U {{ postgresql_replication_user }}
-  sudo: yes
-  sudo_user: "{{ postgresql_admin_user }}"
+  become: yes
+  become_user: "{{ postgresql_admin_user }}"
   when: postgresql_cluster_reset and postgresql_replication_host
   notify:
     - restart postgresql
@@ -54,8 +54,8 @@
     src: recovery.conf.j2
     dest: "{{ postgresql_data_directory }}/recovery.conf"
     mode: 0600
-  sudo: yes
-  sudo_user: "{{ postgresql_admin_user }}"
+  become: yes
+  become_user: "{{ postgresql_admin_user }}"
   when: postgresql_replication_host
   notify:
     - restart postgresql
